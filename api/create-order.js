@@ -21,17 +21,9 @@ module.exports = async (req, res) => {
       purchase_units: [
         {
           amount: {
-            currency_code: 'USD',
-            value: totalAmount.toFixed(2)
-          },
-          items: items.map(item => ({
-            name: item.name,
-            unit_amount: {
-              currency_code: item.currency,
-              value: item.price.toFixed(2)
-            },
-            quantity: '1'
-          }))
+            currency_code: 'JPY',
+            value: 100
+          }
         }
       ]
     });
