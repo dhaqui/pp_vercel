@@ -45,7 +45,7 @@
       cursor: pointer;
       display: block;
       margin: 20px auto;
-      width: 50%; /* 幅を半分に設定 */
+      width: 50%;
       text-align: center;
     }
 
@@ -62,11 +62,11 @@
 
     #paypal-button-container button,
     #alternate-button-container button {
-      width: 50%; /* ボタンの幅を半分に */
+      width: 50%;
     }
 
     #paypal-button-container {
-    　width: 400px; /* 横幅を400pxに設定 */
+    　width: 400px;
   　}
 
     .note {
@@ -77,7 +77,7 @@
     }
 
     .logo-container img {
-      width: 400px; /* 横幅を4倍に設定 */
+      width: 400px;
     }
 
   </style>
@@ -136,8 +136,8 @@
       onApprove: function (data, actions) {
         return actions.order.capture().then(function (details) {
           alert('Transaction completed by ' + details.payer.name.given_name);
-          // 成功した場合、次のページにリダイレクトする場合は、以下を使用します
-          // window.location.href = 'success.html';
+          // 支払い完了時に完了ページにリダイレクト
+          window.location.href = 'success.html';
         });
       }
     }).render('#paypal-button-container');
