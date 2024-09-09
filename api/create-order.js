@@ -2,8 +2,8 @@ const paypal = require('@paypal/checkout-server-sdk');
 
 // PayPalの環境設定（ここでclient_idとclient_secretを直接設定）
 const environment = new paypal.core.SandboxEnvironment(
-  'AeNx2jnN5CUV4jAPLqYMat3ig6PDZXh-kKPnTjQQIIU6AVNA79QnRp-dk4tqHvnnqBbzR_WlCovKdMN-', // あなたのclient_id
-  'EAMWkTh00y7VV_OF0rjxXvriOLYOCOINlwQLfwuif4HjSxSfOFcvI3TV5363vM1svOPqyX00HtlQIepu' // あなたのclient_secret
+  'AV3P5knBPhPGwS7EDayvKulircVel0n9adwODe6qRp1-0vp2pZ2DRaOa0kegvAwQYlJ4K_C78v3RduCG', // あなたのclient_id
+  'EATQXaVnsOagF0rvsfzZwaSmk_040HeX1t2aOrLjOOjx2LlCGVCjdJwaQUJ_9rCpI4vYCFDaM2sn3fPb' // あなたのclient_secret
 );
 const client = new paypal.core.PayPalHttpClient(environment);
 
