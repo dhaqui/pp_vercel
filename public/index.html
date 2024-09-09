@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PayPal Payment</title>
+</head>
+<body>
+  <h1>PayPal Payment</h1>
+  <button id="paypal-button">Pay with PayPal</button>
+
+  <script>
+    document.getElementById("paypal-button").addEventListener("click", async () => {
+      try {
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [
+              { id: 'item-1', name: 'Product 1', price: 100, currency: 'USD' }
+            ]
+          })
+        });
+
+        const orderData = await response.json();
+
+        if (orderData.id) {
+          window.location.href = `https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`;
+        } else {
+          console.error('Order creation failed', orderData);
+        }
+      } catch (error) {
+        console.error('Error during PayPal order creation:', error);
+      }
+    });
+  </script>
+</body>
+</html>
