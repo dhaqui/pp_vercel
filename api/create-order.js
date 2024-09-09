@@ -1,7 +1,10 @@
 const paypal = require('@paypal/checkout-server-sdk');
 
-// PayPalの環境設定（Vercelの環境変数を使用）
-const environment = new paypal.core.SandboxEnvironment(process.env.PAYPAL_CLIENT_ID, process.env.PAYPAL_CLIENT_SECRET);
+// PayPalの環境設定（ここでclient_idとclient_secretを直接設定）
+const environment = new paypal.core.SandboxEnvironment(
+  'AeNx2jnN5CUV4jAPLqYMat3ig6PDZXh-kKPnTjQQIIU6AVNA79QnRp-dk4tqHvnnqBbzR_WlCovKdMN-', // あなたのclient_id
+  'EAMWkTh00y7VV_OF0rjxXvriOLYOCOINlwQLfwuif4HjSxSfOFcvI3TV5363vM1svOPqyX00HtlQIepu' // あなたのclient_secret
+);
 const client = new paypal.core.PayPalHttpClient(environment);
 
 module.exports = async (req, res) => {
