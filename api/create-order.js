@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
         {
           amount: {
             currency_code: 'JPY',
-            value: 100
+            value: 3600
           }
         }
       ]
