@@ -158,42 +158,54 @@
     // Hide non-PayPal button by default
     document.querySelector('#alternate-button-container').style.display = 'none';
 
-     // 銀行口座で決済ボタンが押された場合
-     document.getElementById('bank-payment-button').addEventListener('click', async () => {
-       try {
-         // サーバーにリクエストを送信し、オーダーを作成
-         const response = await fetch('/api/create-order', {
-           method: 'POST',
-           headers: {
-             'Content-Type': 'application/json'
-           },
-           body: JSON.stringify({
-             items: [
-               { id: 'item-1', name: 'Product 1', price: 3600, currency: 'JPY' }
-             ]
-           })
-         });
+    // 銀行口座で決済ボタンが押された場合
+    document.getElementById('bank-payment-button').addEventListener('click', async () => {
+      try {
+        // サーバーにリクエストを送信し、オーダーを作成
+        const response = await fetch('/api/create-order', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            items: [
+              { id: 'item-1', name: 'Product 1', price: 3600, currency: 'JPY' }
+            ]
+          })
+        });
 
-         const orderData = await response.json();
+        const orderData = await response.json();
 
-         if (orderData.id) {
-           // 新しいウィンドウでPayPalのチェックアウト画面を表示する（モーダル風）
-           const popup = window.open(`https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`, 'PayPal Checkout', 'width=500,height=700');
+        if (orderData.id) {
+          // ポップアップウィンドウの幅と高さ
+          const width = 500;
+          const height = 700;
 
-           // ポップアップウィンドウが閉じられるのを検出して成功メッセージを表示
-           const checkPopupClosed = setInterval(() => {
-             if (popup.closed) {
-               clearInterval(checkPopupClosed);
-               document.getElementById('success-message').style.display = 'block';
-             }
-           }, 500);
-         } else {
-           console.error('Order creation failed', orderData);
-         }
-       } catch (error) {
-         console.error('Error during PayPal order creation:', error);
-       }
-     });
+          // 画面中央に表示するための位置を計算
+          const left = (window.screen.width / 2) - (width / 2);
+          const top = (window.screen.height / 2) - (height / 2);
+
+          // 新しいウィンドウでPayPalのチェックアウト画面を表示する（モーダル風）
+          const popup = window.open(
+            `https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`,
+            'PayPal Checkout',
+            `width=${width},height=${height},top=${top},left=${left}`
+          );
+
+          // ポップアップウィンドウが閉じられるのを検出して成功メッセージを表示
+          const checkPopupClosed = setInterval(() => {
+            if (popup.closed) {
+              clearInterval(checkPopupClosed);
+              document.getElementById('success-message').style.display = 'block';
+            }
+          }, 500);
+        } else {
+          console.error('Order creation failed', orderData);
+        }
+      } catch (error) {
+        console.error('Error during PayPal order creation:', error);
+      }
+    });
   </script>
 </body>
 </html>
