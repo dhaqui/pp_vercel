@@ -185,18 +185,37 @@
           const left = (window.screen.width / 2) - (width / 2);
           const top = (window.screen.height / 2) - (height / 2);
 
-          // 新しいウィンドウでPayPalのチェックアウト画面を表示する（モーダル風）
+          // 新しいウィンドウでPayPalのチェックアウト画面を表示する
           const popup = window.open(
             `https://www.sandbox.paypal.com/checkoutnow?token=${orderData.id}`,
             'PayPal Checkout',
             `width=${width},height=${height},top=${top},left=${left}`
           );
 
-          // ポップアップウィンドウが閉じられるのを検出して成功メッセージを表示
-          const checkPopupClosed = setInterval(() => {
-            if (popup.closed) {
-              clearInterval(checkPopupClosed);
-              document.getElementById('success-message').style.display = 'block';
+          // ポップアップウィンドウのURLを監視
+          const checkPopup = setInterval(() => {
+            if (!popup || popup.closed) {
+              clearInterval(checkPopup);
+              console.log('Popup closed before reaching success or cancel URL');
+            }
+
+            try {
+              // ポップアップのURLが 'success' を含んでいるかチェック
+              if (popup.location.href.includes('https://yourwebsite.com/success')) {
+                clearInterval(checkPopup);
+                popup.close();  // モーダルを閉じる
+
+                // 親ウィンドウで決済成功処理
+                document.getElementById('success-message').style.display = 'block';
+              } else if (popup.location.href.includes('https://yourwebsite.com/cancel')) {
+                clearInterval(checkPopup);
+                popup.close();  // モーダルを閉じる
+
+                // キャンセルされた場合の処理
+                document.getElementById('cancel-message').style.display = 'block';
+              }
+            } catch (error) {
+              // CORS制約のため、クロスドメインの間はアクセスが拒否される可能性があるので無視
             }
           }, 500);
         } else {
