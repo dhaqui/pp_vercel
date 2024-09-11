@@ -192,18 +192,13 @@
             `width=${width},height=${height},top=${top},left=${left}`
           );
 
-          // 決済完了後、ポップアップウィンドウを閉じる
+          // ポップアップウィンドウが閉じられるのを検出して成功メッセージを表示
           const checkPopupClosed = setInterval(() => {
             if (popup.closed) {
               clearInterval(checkPopupClosed);
               document.getElementById('success-message').style.display = 'block';
             }
           }, 500);
-
-          // 支払い完了時にポップアップを閉じる
-          popup.addEventListener('unload', function () {
-            popup.close(); // ウィンドウを閉じる
-          });
         } else {
           console.error('Order creation failed', orderData);
         }
