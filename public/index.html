@@ -114,10 +114,6 @@
       <button type="button" id="bank-payment-button">銀行口座で決済を行う</button>
     </div>
 
-    <div class="success-message" id="success-message">
-      支払いが完了しました。ありがとうございました！
-    </div>
-
   </div>
 
   <script src="https://www.paypal.com/sdk/js?client-id=AeNx2jnN5CUV4jAPLqYMat3ig6PDZXh-kKPnTjQQIIU6AVNA79QnRp-dk4tqHvnnqBbzR_WlCovKdMN-&currency=JPY&components=buttons,marks"></script>
@@ -196,24 +192,18 @@
             `width=${width},height=${height},top=${top},left=${left}`
           );
 
-          // ポップアップウィンドウが作成されているか確認
-          if (popup) {
-            // 決済完了後、ポップアップウィンドウを閉じる
-            const checkPopupClosed = setInterval(() => {
-              if (popup.closed) {
-                clearInterval(checkPopupClosed);
-                document.getElementById('success-message').style.display = 'block';
-              }
-            }, 500);
+          // 決済完了後、ポップアップウィンドウを閉じる
+          const checkPopupClosed = setInterval(() => {
+            if (popup.closed) {
+              clearInterval(checkPopupClosed);
+              document.getElementById('success-message').style.display = 'block';
+            }
+          }, 500);
 
-            // 支払い完了時にポップアップを閉じる
-            popup.addEventListener('unload', function () {
-              popup.close(); // ウィンドウを閉じる
-            });
-          } else {
-            // ポップアップが開けない場合、エラーメッセージを表示
-            alert("ポップアップがブロックされました。ブラウザのポップアップブロックを確認してください。");
-          }
+          // 支払い完了時にポップアップを閉じる
+          popup.addEventListener('unload', function () {
+            popup.close(); // ウィンドウを閉じる
+          });
         } else {
           console.error('Order creation failed', orderData);
         }
