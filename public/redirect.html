@@ -5,20 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Payment Redirect</title>
   <script>
-    // クエリパラメータからオーダーIDを取得
+    // クエリパラメータから指定したパラメータを取得
     function getQueryParam(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
     }
 
-    // オーダーIDを元にサーバーへCAPTUREリクエストを送信
-    async function capturePayment(orderId) {
+    // token (PayPalの内部Order ID) を元にサーバーへCAPTUREリクエストを送信
+    async function capturePayment(token) {
+      console.log(`Capturing payment for token: ${token}`); // デバッグ用ログ
       try {
-        const response = await fetch(`/api/capture?orderId=${orderId}`, {
+        const response = await fetch(`/api/capture-order?token=${token}`, {
           method: 'POST'
         });
 
         const result = await response.json();
+        console.log('Capture response:', result); // デバッグ用ログ
 
         if (result.status === 'COMPLETED') {
           // 決済が成功した場合はsuccess.htmlにリダイレクト
@@ -26,19 +28,22 @@
         } else {
           // エラー処理
           console.error('Payment capture failed', result);
+          document.body.innerHTML = '<h1>決済に失敗しました。</h1>';
         }
       } catch (error) {
-        console.error('Error capturing payment:', error);
+        console.error('Error capturing payment:', error); // エラーログ
+        document.body.innerHTML = '<h1>決済エラーが発生しました。</h1>';
       }
     }
 
     // ウィンドウがロードされたときにCAPTUREを実行
     window.onload = function() {
-      const orderId = getQueryParam('orderId');
-      if (orderId) {
-        capturePayment(orderId);
+      const token = getQueryParam('token'); // クエリから token を取得
+      if (token) {
+        capturePayment(token); // token を使って capture リクエストを送信
       } else {
-        console.error('Order ID not found in query parameters.');
+        console.error('Token not found in query parameters.');
+        document.body.innerHTML = '<h1>Tokenが見つかりませんでした。</h1>';
       }
     };
   </script>
