@@ -1,9 +1,9 @@
 const paypal = require('@paypal/checkout-server-sdk');
 
-// PayPalの環境設定（ここでclient_idとclient_secretを直接設定）
+// PayPalの環境設定
 const environment = new paypal.core.SandboxEnvironment(
-  'AV3P5knBPhPGwS7EDayvKulircVel0n9adwODe6qRp1-0vp2pZ2DRaOa0kegvAwQYlJ4K_C78v3RduCG', // あなたのclient_id
-  'EATQXaVnsOagF0rvsfzZwaSmk_040HeX1t2aOrLjOOjx2LlCGVCjdJwaQUJ_9rCpI4vYCFDaM2sn3fPb' // あなたのclient_secret
+  'AV3P5knBPhPGwS7EDayvKulircVel0n9adwODe6qRp1-0vp2pZ2DRaOa0kegvAwQYlJ4K_C78v3RduCG',
+  'EATQXaVnsOagF0rvsfzZwaSmk_040HeX1t2aOrLjOOjx2LlCGVCjdJwaQUJ_9rCpI4vYCFDaM2sn3fPb'
 );
 const client = new paypal.core.PayPalHttpClient(environment);
 
@@ -22,10 +22,14 @@ module.exports = async (req, res) => {
         {
           amount: {
             currency_code: 'JPY',
-            value: 3600
+            value: totalAmount.toString()
           }
         }
-      ]
+      ],
+      application_context: {
+        return_url: 'https://yourwebsite.com/success',  // 決済成功後のリダイレクト先URL
+        cancel_url: 'https://yourwebsite.com/cancel'   // キャンセル後のリダイレクト先URL
+      }
     });
 
     try {
