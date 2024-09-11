@@ -192,18 +192,24 @@
             `width=${width},height=${height},top=${top},left=${left}`
           );
 
-          // 決済完了後、ポップアップウィンドウを閉じる
-          const checkPopupClosed = setInterval(() => {
-            if (popup.closed) {
-              clearInterval(checkPopupClosed);
-              document.getElementById('success-message').style.display = 'block';
-            }
-          }, 500);
+          // ポップアップウィンドウが作成されているか確認
+          if (popup) {
+            // 決済完了後、ポップアップウィンドウを閉じる
+            const checkPopupClosed = setInterval(() => {
+              if (popup.closed) {
+                clearInterval(checkPopupClosed);
+                document.getElementById('success-message').style.display = 'block';
+              }
+            }, 500);
 
-          // 支払い完了時にポップアップを閉じる
-          popup.addEventListener('unload', function () {
-            popup.close(); // ウィンドウを閉じる
-          });
+            // 支払い完了時にポップアップを閉じる
+            popup.addEventListener('unload', function () {
+              popup.close(); // ウィンドウを閉じる
+            });
+          } else {
+            // ポップアップが開けない場合、エラーメッセージを表示
+            alert("ポップアップがブロックされました。ブラウザのポップアップブロックを確認してください。");
+          }
         } else {
           console.error('Order creation failed', orderData);
         }
