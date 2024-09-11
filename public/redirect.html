@@ -15,7 +15,7 @@
     async function capturePayment(token) {
       console.log(`Capturing payment for token: ${token}`); // デバッグ用ログ
       try {
-        const response = await fetch(`/api/capture-order?token=${token}`, {
+        const response = await fetch(`/api/capture?token=${token}`, {
           method: 'POST'
         });
 
