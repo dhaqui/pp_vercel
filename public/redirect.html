@@ -3,20 +3,47 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Payment Success</title>
+  <title>Payment Redirect</title>
   <script>
-    // ウィンドウがロードされたときにポップアップを閉じる
+    // クエリパラメータからオーダーIDを取得
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    // オーダーIDを元にサーバーへCAPTUREリクエストを送信
+    async function capturePayment(orderId) {
+      try {
+        const response = await fetch(`/api/capture?orderId=${orderId}`, {
+          method: 'POST'
+        });
+
+        const result = await response.json();
+
+        if (result.status === 'COMPLETED') {
+          // 決済が成功した場合はsuccess.htmlにリダイレクト
+          window.location.href = '/success.html';
+        } else {
+          // エラー処理
+          console.error('Payment capture failed', result);
+        }
+      } catch (error) {
+        console.error('Error capturing payment:', error);
+      }
+    }
+
+    // ウィンドウがロードされたときにCAPTUREを実行
     window.onload = function() {
-      if (window.opener) {
-        // 親ウィンドウに決済成功を通知
-        window.opener.postMessage({ status: 'success' }, '*');
-        // 自身のウィンドウ（ポップアップ）を閉じる
-        window.close();
+      const orderId = getQueryParam('orderId');
+      if (orderId) {
+        capturePayment(orderId);
+      } else {
+        console.error('Order ID not found in query parameters.');
       }
     };
   </script>
 </head>
 <body>
-  <h1>決済が成功しました！</h1>
+  <h1>決済処理を完了しています...</h1>
 </body>
 </html>
