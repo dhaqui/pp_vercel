@@ -199,6 +199,19 @@
         console.error('Error during PayPal order creation:', error);
       }
     });
+
+    // メッセージを受け取る
+    window.addEventListener('message', function(event) {
+      if (event.data.status === 'success') {
+        // 決済成功時に親ウィンドウをsuccess.htmlにリダイレクト
+        if (event.data.redirect) {
+          window.location.href = '/success.html';
+        } else {
+          // そのまま成功メッセージを表示するなどの処理
+          document.getElementById('success-message').style.display = 'block';
+        }
+      }
+    });
   </script>
 </body>
 </html>

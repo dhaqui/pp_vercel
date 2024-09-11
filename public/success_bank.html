@@ -59,8 +59,8 @@
   <script>
     function closePopup() {
       if (window.opener) {
-        // 親ウィンドウに決済成功を通知
-        window.opener.postMessage({ status: 'success' }, '*');
+        // 親ウィンドウに決済成功を通知し、親ウィンドウをsuccess.htmlに遷移させる
+        window.opener.postMessage({ status: 'success', redirect: true }, '*');
         // 自身のウィンドウ（ポップアップ）を閉じる
         window.close();
       }
